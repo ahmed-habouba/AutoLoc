@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "employe")
@@ -27,4 +29,10 @@ public class Employe {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)
     private RoleEmploye role;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_agence", nullable = false)
+    private Agence agence;
+
+    @OneToMany(mappedBy = "employe")
+    private List<Reservation> reservations = new ArrayList<>();
 }

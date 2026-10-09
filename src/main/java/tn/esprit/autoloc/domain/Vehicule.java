@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import java.util.*;
 
 import java.math.BigDecimal;
 
@@ -39,4 +40,22 @@ public class Vehicule {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)
     private StatutVehicule statut;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_agence", nullable = false)
+    private Agence agence;
+
+    @OneToMany(mappedBy = "vehicule", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Reservation> reservations = new ArrayList<>();
+
+    @OneToMany(mappedBy = "vehicule", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Maintenance> maintenances = new ArrayList<>();
+
+    @ManyToMany
+    @JoinTable(
+            name = "vehicule_equipement",
+            joinColumns = @JoinColumn(name = "id_vehicule"),
+            inverseJoinColumns = @JoinColumn(name = "id_equipement")
+    )
+    private Set<Equipement> equipements = new HashSet<>();
 }
